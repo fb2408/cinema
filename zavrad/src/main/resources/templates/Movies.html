@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous">
+    </script>
+    <script th:src="@{/js/main.js}"></script>
+    <link th:href="@{/css/main.css}" rel="stylesheet" >
+    <title>Cinema</title>
+</head>
+<body>
+
+<button  type="button" class="open-modal-add btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMovieModal"  data-toggle="tooltip" data-placement="top" title="Add movie">
+    <span>
+        <h6>Add Movie</h6>
+    </span>
+</button>
+<div th:object="${mapOfMovies}">
+
+    <table class="table table-striped" style="width: 70%">
+        <thead>
+        <tr>
+            <th>Title</th>
+            <th>Duration</th>
+            <th>Description</th>
+            <th>Release Date</th>
+            <th>Start screening date</th>
+            <th>End Screening Date</th>
+            <th>Genre</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="movie : ${mapOfMovies}">
+           <div th:id="${movie.key.getId()}">
+               <td th:id="${movie.key.getId() + 'Title'}" th:text="${movie.key.getTitle()}"></td>
+               <td th:id="${movie.key.getId() + 'Duration'}" th:text="${movie.key.getDuration()}"></td>
+               <td th:id="${movie.key.getId() + 'Description'}">
+                   <button  th:text="Desc" type="button" th:data-id="${movie.key.getId()}" th:data-title="${movie.key.getTitle()}" th:data-desc="${movie.key.getDescription()}" class="open-modal-view" data-bs-toggle="modal" data-bs-target="#viewMovieDescriptionModal"  data-toggle="tooltip" data-placement="top" title="View movie description">
+                   </button>
+               </td>
+               <td th:id="${movie.key.getId() + 'ReleaseDate'}" th:text="${movie.key.getReleaseDate()}"></td>
+               <td th:id="${movie.key.getId() + 'StartScreeningDate'}" th:text="${movie.key.getStartScreeningDate()}"></td>
+               <td th:id="${movie.key.getId() + 'EndScreeningDate'}" th:text="${movie.key.getEndScreeningDate()}"></td>
+               <!--these 3 are form editing -->
+               <input th:id="${movie.key.getId() + 'hidReleaseDate'}" type="date" pattern="yyyy-MM-dd" th:name="releaseDate" th:value="${movie.key.getReleaseDate()}" class="form-control form-control-sm"  aria-label=".form-control-sm example" hidden>
+               <input th:id="${movie.key.getId() + 'hidStartScreeningDate'}" type="date" pattern="yyyy-MM-dd" th:name="startScreeningDate" th:value="${movie.key.getStartScreeningDate()}" class="form-control form-control-sm"  aria-label=".form-control-sm example" hidden>
+               <input th:id="${movie.key.getId() + 'hidEndScreeningDate'}" type="date" pattern="yyyy-MM-dd" th:name="endScreeningDate" th:value="${movie.key.getEndScreeningDate()}" class="form-control form-control-sm"  aria-label=".form-control-sm example" hidden>
+               <td th:id="'movieGenres' + ${movie.key.getId()}" >
+                   <div class="curr-genres" th:each="genre : ${movie.value}" th:data-id="${genre.getId()}" th:text="${genre.getName()}" hidden>
+                   </div>
+                   <span>
+                    <button type="button" class="btn btn-secondary" th:onclick="'viewGenres(' + ${movie.key.getId()} + ')'" data-toggle="tooltip" data-placement="top" title="View Genres">
+                        <img th:src="@{/images/magnifier-icon.png}" width="20" alt=""/>
+                    </button>
+                    </span>
+               </td>
+           </div>
+            <td>
+                <span>
+                    <button  type="button" th:data-id="${movie.key.getId()}" th:data-title="${movie.key.getTitle()}"
+                             th:data-duration="${movie.key.getDuration()}" th:data-description="${movie.key.getDescription()}" th:data-release="${movie.key.getReleaseDate()}"
+                             th:data-start="${movie.key.getStartScreeningDate()}"
+                             th:data-end="${movie.key.getEndScreeningDate()}"
+                             class="open-editModalMovie btn btn-primary" data-bs-toggle="modal" data-bs-target="#editMovieModal" data-toggle="tooltip" data-placement="top" title="Edit movie" >
+                        <img th:src="@{/images/pencil-icon.png}" width="20" alt=""/>
+                    </button>
+                </span>
+                <span>
+                    <button class="btn btn-primary" th:type="button" th:onclick="'del(' + ${movie.key.Id} + ')'"  data-toggle="tooltip" data-placement="top" title="Delete movie" >
+                        <img th:src="@{/images/delete-icon.png}" width="20" alt=""/>
+                    </button>
+                </span>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Button trigger modal -->
+
+<!-- Add movie Modal -->
+<div class="modal fade" id="addMovieModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Add Movie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form" th:action="@{/admin/movies/add/}" method="post">
+                        <label for="addTitle" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
+                        <input id="addTitle" th:name="title" class="form-control form-control-sm" type="text"  aria-label=".form-control-sm example">
+                        <label for="addDuration" class="col-sm-2 col-form-label col-form-label-sm">Duration</label>
+                        <input id="addDuration" type="text" th:name="duration" class="form-control form-control-sm " aria-label=".form-control-sm example">
+                        <label for="addDescription" class="col-sm-2 col-form-label col-form-label-sm">Description</label>
+                        <input id="addDescription"  th:name="description" class="form-control form-control-sm" type="text" aria-label=".form-control-sm example">
+                        <label for="addReleaseDate" class="col-sm-2 col-form-label col-form-label-sm">ReleaseDate</label>
+                        <input id="addReleaseDate" type="date" pattern="yyyy-MM-dd" th:name="releaseDate" class="form-control form-control-sm"  aria-label=".form-control-sm example">
+                        <label for="addStartScreeningDate" class="col-sm-2 col-form-label col-form-label-sm">StartScreeningDate</label>
+                        <input id="addStartScreeningDate" type="date" pattern="yyyy-MM-dd" th:name="startScreeningDate"  class="form-control form-control-sm"  aria-label=".form-control-sm example">
+                        <label for="addEndScreeningDate" class="col-sm-2 col-form-label col-form-label-sm">EndScreeningDate</label>
+                        <input id="addEndScreeningDate" type="date" pattern="yyyy-MM-dd" th:name="endScreeningDate" class="form-control form-control-sm"  aria-label=".form-control-sm example">
+                        <hr>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button  type="submit" class="btn btn-primary add-movie">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editMovieModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Edit Movie</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form class="form" th:action="@{/admin/movies/edit/}" method="post">
+                    <input id="editId" th:name="id" class="form-control form-control-sm" type="text"  aria-label=".form-control-sm example" hidden>
+                    <label for="editTitle" class="col-sm-2 col-form-label col-form-label-sm">Title</label>
+                    <input id="editTitle" th:name="title" class="form-control form-control-sm" type="text"  aria-label=".form-control-sm example">
+                    <label for="editDuration" class="col-sm-2 col-form-label col-form-label-sm">Duration</label>
+                    <input id="editDuration" type="text" th:name="duration" class="form-control form-control-sm " aria-label=".form-control-sm example">
+                    <label for="editDescription" class="col-sm-2 col-form-label col-form-label-sm">Description</label>
+                    <input id="editDescription"  th:name="description" class="form-control form-control-sm" type="text" aria-label=".form-control-sm example">
+                    <label for="editReleaseDate" class="col-sm-2 col-form-label col-form-label-sm">ReleaseDate</label>
+                    <input id="editReleaseDate" type="date" pattern="yyyy-MM-dd" th:name="releaseDate" class="form-control form-control-sm"  aria-label=".form-control-sm example">
+                    <label for="editStartScreeningDate" class="col-sm-2 col-form-label col-form-label-sm">StartScreeningDate</label>
+                    <input id="editStartScreeningDate" type="date" pattern="yyyy-MM-dd" th:name="startScreeningDate"  class="form-control form-control-sm"  aria-label=".form-control-sm example">
+                    <label for="editEndScreeningDate" class="col-sm-2 col-form-label col-form-label-sm">EndScreeningDate</label>
+                    <input id="editEndScreeningDate" type="date" pattern="yyyy-MM-dd" th:name="endScreeningDate" class="form-control form-control-sm"  aria-label=".form-control-sm example">
+                    <hr>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary edit-movie">Save changes</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="viewMovieDescriptionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="viewDescTitle"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p id="viewDesc"></p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(function () {
+        $('[data-toggle="tooltip"]').tooltip()
+    })
+
+    $(document).on("click", ".open-editModalMovie", function () {
+        var movieId = $(this).data('id');
+        var title = $(this).data('title');
+        var duration = $(this).data('duration');
+        var description = $(this).data('description');
+        var releaseDate = $(document.getElementById(movieId + 'hidReleaseDate')).val();
+        var startScreeningDate = $(document.getElementById(movieId + 'hidStartScreeningDate')).val();
+        var endScreeningDate = $(document.getElementById(movieId + 'hidEndScreeningDate')).val();
+        $(".modal-body #editId").val(movieId)
+        $(".modal-body #editTitle").val(title)
+        $(".modal-body #editDuration").val(duration)
+        $(".modal-body #editDescription").val(description)
+        $(".modal-body #editReleaseDate").val(releaseDate)
+        $(".modal-body #editStartScreeningDate").val(startScreeningDate)
+        $(".modal-body #editEndScreeningDate").val(endScreeningDate)
+    });
+
+    $(document).on("click", ".open-modal-view", function () {
+        var movieId = $(this).data('id');
+        var title = $(this).data('title');
+        var description = $(this).data('desc');
+        $(".modal-header #viewDescTitle").text(title)
+        $(".modal-body #viewDesc").text(description)
+    });
+</script>
+</body>
+</html>

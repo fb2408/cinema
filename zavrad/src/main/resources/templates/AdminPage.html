@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cinema</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous">
+    </script>
+
+    <script th:src="@{/js/main.js}"></script>
+    <link th:href="@{/css/main.css}" rel="stylesheet" >
+</head>
+<body class="bg-dark">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a th:href="@{/}" class="navbar-brand">
+            <img th:src="@{/images/cinema-logo-2.png}" height="37" alt="Cinema">
+            Cinema
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto">
+                <button th:if="${!loggedIn}" th:onclick="unHideLogin()" class="nav-item nav-link" >Login</button>
+                <a th:if="${loggedIn}" class="nav-item nav-link " th:href="@{/profile}">
+                    <img th:src="@{/images/person-icon-0.png}" alt="user"  height="37">
+                </a>
+                <a th:if="${loggedIn}" class="nav-link font-navbar" th:href="@{/logout}">
+                    <img th:src="@{/images/icon-logout-0.jpg}" alt="user" width="30" height="30">
+                </a>
+            </div>
+
+        </div>
+
+    </div>
+</nav>
+
+<div class="profile-div bg-light">
+    <div class="grid3" style="padding-top: 2rem">
+        <div class="person">
+            <div class="photo-container">
+                <img th:src="@{/images/user_avatar.jpg}" th:width="120px" alt="Circle Image" class="rounded-circle"
+                     src="">
+            </div>
+            <h3 class="title" th:text="${user.getFirstname() +' '+ user.getLastname()}">Ime Prezime</h3>
+            <p class="category" th:text="${user.getType()}"></p>
+            <button th:unless="${user.isAdmin()}" onclick="showpopup()" class="btn btn-primary">Surcharge</button>
+
+        </div>
+
+        <div class="content mygrid amounts">
+        </div>
+        <div class="content mygrid personalinfo">
+            <span><b>Username:</b></span> <span th:text="${'  ' + user.getUsername()}"></span>
+            <br><br>
+            <span><b>Email:</b></span><span th:text="${'  ' + user.getEmail()}"></span>
+        </div>
+    </div>
+    <div class="flex-container">
+        <button class="btn btn-primary flex-item" style="margin-left: 70px">Movies</button>
+        <button class=" btn btn-primary flex-item">Genres</button>
+        <button class=" btn btn-primary flex-item">Cinemas</button>
+        <button class=" btn btn-primary flex-item">Cinema Halls</button>
+        <button class=" btn btn-primary flex-item">Screenings</button>
+        <button class=" btn btn-primary flex-item">Cities</button>
+        <button class=" btn btn-primary flex-item">Persons</button>
+    </div>
+
+</div>
+</body>
+</html>

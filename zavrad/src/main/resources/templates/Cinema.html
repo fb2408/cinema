@@ -1,0 +1,266 @@
+<link href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+
+<!DOCTYPE html><html class=''>
+<head><script src='//production-assets.codepen.io/assets/editor/live/console_runner-079c09a0e3b9ff743e39ee2d5637b9216b3545af0de366d4b9aad9dc87e26bfd.js'></script><script src='//production-assets.codepen.io/assets/editor/live/events_runner-73716630c22bbc8cff4bd0f07b135f00a0bdc5d14629260c3ec49e5606f98fdd.js'></script><script src='//production-assets.codepen.io/assets/editor/live/css_live_reload_init-2c0dc5167d60a5af3ee189d570b1835129687ea2a61bee3513dee3a50c115a77.js'></script><meta charset='UTF-8'><meta name="robots" content="noindex"><link rel="shortcut icon" type="image/x-icon" href="//production-assets.codepen.io/assets/favicon/favicon-8ea04875e70c4b0bb41da869e81236e54394d63638a1ef12fa558a4a835f1164.ico" /><link rel="mask-icon" type="" href="//production-assets.codepen.io/assets/favicon/logo-pin-f2d2b6d2c61838f7e76325261b7195c27224080bc099486ddd6dccb469b8e8e6.svg" color="#111" /><link rel="canonical" href="https://codepen.io/ryanparag/pen/LLrVbo?depth=everything&order=popularity&page=10&q=movie&show_forks=false" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css'><link rel='stylesheet prefetch' href='https://fonts.googleapis.com/icon?family=Material+Icons'>
+    <script th:src="@{/js/main.js}"></script>
+    <style class="cp-pen-styles">@import url("https://fonts.googleapis.com/css?family=Arimo:400,700");
+
+    body {
+        height: 100%;
+        width: 100%;
+        background: #242333;
+        font-family: 'Arimo', Arial, sans-serif;
+        font-weight: 400;
+        font-size: 14px;
+        color: #010b26;
+    }
+
+    * {
+        -webkit-transition: 300ms;
+        transition: 300ms;
+    }
+
+    .intro {
+        text-align: center;
+    }
+
+    ul {
+        list-style-type: none;
+    }
+
+    h1, h2, h3, h4, h5, p {
+        font-weight: 400;
+    }
+
+    a {
+        text-decoration: none;
+        color: inherit;
+    }
+
+
+    .container {
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        max-width: 100%;
+        margin-top: 6vh;
+        margin-left: auto;
+        margin-right: auto;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+    }
+
+    .movie-card {
+        background: #ffffff;
+        box-shadow: 0px 6px 18px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 315px;
+        margin: 2em;
+        border-radius: 10px;
+        display: inline-block;
+    }
+
+    .movie-header {
+        padding: 0;
+        margin: 0;
+        height: 367px;
+        width: 100%;
+        display: block;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    /*.shawnshank {*/
+    /*    background: url("/movie-images/ShawnshankRedemption.jpg");*/
+    /*    background-size: cover;*/
+    /*}*/
+
+
+    .bladeRunner2049 {
+        background: url("http://cdn.collider.com/wp-content/uploads/2017/05/blade-runner-2049-poster-ryan-gosling.jpeg");
+        background-size: cover;
+        background-position: 100% 80%;
+    }
+
+    .header-icon-container {
+        position: relative;
+    }
+
+    .movie-card:hover {
+        -webkit-transform: scale(1.03);
+        transform: scale(1.03);
+        box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.08);
+    }
+
+    .movie-content {
+        padding: 18px 18px 24px 18px;
+        margin: 0;
+    }
+
+    .movie-content-header, .movie-info {
+        display: table;
+        width: 100%;
+    }
+
+    .movie-title {
+        font-size: 27px;
+        margin: 0;
+        display: table-cell;
+    }
+
+
+    .movie-info {
+        margin-top: 1em;
+    }
+
+    .info-section {
+        display: block;
+        text-transform: uppercase;
+        text-align: left;
+    }
+
+    .button-container button {
+        display: inline;
+        margin-bottom: .5em;
+        margin-left: 4px;
+        margin-right: 4px;
+        font-size: 12px;
+    }
+
+    .info-section label {
+        color: rgba(0, 0, 0, 0.5);
+        margin-bottom: .5em;
+        font-size: 10px;
+    }
+
+    .info-section span {
+        font-weight: 700;
+        font-size: 12px;
+    }
+
+    .nav-tabs {
+        background: #ffffff;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        margin-top: 8vh;
+        margin-left: 400px;
+        margin-right: 400px;
+        -webkit-box-pack: center;
+        -ms-flex-pack: center;
+        justify-content: center;
+        height: 50px;
+        border-radius: 5px;
+    }
+
+    .nav-tabs button {
+        width: 13.5%;
+        height: 90%;
+        background-color: rgb(204, 204, 204);
+        color: rgb(0, 0, 0);
+        text-align: center;
+        font-size: 23px;
+        margin: 5px 2px;
+        border-radius: 5px;
+        border-color: rgb(204, 204, 204);
+    }
+
+    .nav-tabs .active {
+        background-color: #010b26;
+        color: #6ABCEA;
+    }
+
+    @media screen and (max-width: 500px) {
+        .movie-card {
+            width: 95%;
+            max-width: 95%;
+            margin: 1em;
+            display: block;
+        }
+
+        .container {
+            padding: 0;
+            margin: 0;
+        }
+    }
+    </style>
+
+</head>
+
+<body>
+
+<nav class="nav-tabs" th:object="${listOfDays}">
+    <button th:if="${active == 0}" class="active" th:onclick="showForDay(0)" aria-current="page"  th:text="${listOfDays.get(0)}"></button>
+    <button th:unless="${active == 0}" class="" th:onclick="showForDay(0)" aria-current="page"  th:text="${listOfDays.get(0)}"></button>
+    <button th:if="${active == 1}" class="active" th:onclick="showForDay(1)" th:text="${listOfDays.get(1)}"></button>
+    <button th:unless="${active == 1}" class="" th:onclick="showForDay(1)" th:text="${listOfDays.get(1)}"></button>
+    <button th:if="${active == 2}" class="active" th:onclick="showForDay(2)" th:text="${listOfDays.get(2)}"></button>
+    <button th:unless="${active == 2}" class="" th:onclick="showForDay(2)" th:text="${listOfDays.get(2)}"></button>
+    <button th:if="${active == 3}" class="active" th:onclick="showForDay(3)" th:text="${listOfDays.get(3)}"></button>
+    <button th:unless="${active == 3}" class="" th:onclick="showForDay(3)" th:text="${listOfDays.get(3)}"></button>
+    <button th:if="${active == 4}" class="active" th:onclick="showForDay(4)" th:text="${listOfDays.get(4)}"></button>
+    <button th:unless="${active == 4}" class="" th:onclick="showForDay(4)" th:text="${listOfDays.get(4)}"></button>
+    <button th:if="${active == 5}" class="active" th:onclick="showForDay(5)" th:text="${listOfDays.get(5)}"></button>
+    <button th:unless="${active == 5}" class="" th:onclick="showForDay(5)" th:text="${listOfDays.get(5)}"></button>
+    <button th:if="${active == 6}" class="active" th:onclick="showForDay(6)" th:text="${listOfDays.get(6)}"></button>
+    <button th:unless="${active == 6}" class="" th:onclick="showForDay(6)" th:text="${listOfDays.get(6)}"></button>
+
+</nav>
+
+<div class="container">
+    <div class="movie-card" th:each="movieAndScreening : ${dayMovies}">
+        <div class="movie-header " th:style="'background: url(' + ${movieAndScreening.getMovie().getImage()} + ')'">
+            <div class="header-icon-container">
+                <a href="#">
+                </a>
+            </div>
+        </div><!--movie-header-->
+        <div class="movie-content">
+            <div class="movie-content-header">
+                <a href="#">
+                    <h3 class="movie-title" th:text="${movieAndScreening.getMovie().getTitle()}"></h3>
+                </a>
+            </div>
+            <div class="movie-info">
+                <div class="info-section">
+                    <label>Director:</label>
+                    <span th:text="${movieAndScreening.getDirector().getName()} + ' ' + ${movieAndScreening.getDirector().getSurname()}"></span>
+                </div>
+                <div class="info-section">
+                    <label>Actors:</label>
+                    <span  th:text="${movieAndScreening.getActors().get(0).getName()} + ' ' + ${movieAndScreening.getActors().get(0).getSurname()} + ', '">
+                    </span>
+                    <span  th:text="${movieAndScreening.getActors().get(1).getName()} + ' ' + ${movieAndScreening.getActors().get(1).getSurname()} + ', '">
+                    </span>
+                    <span  th:text="${movieAndScreening.getActors().get(2).getName()} + ' ' + ${movieAndScreening.getActors().get(2).getSurname()}">
+                    </span>
+
+                </div>
+                <div class="info-section">
+                    <label>Genres:</label>
+                    <span th:each="genre : ${movieAndScreening.getGenres()}" th:text="${genre.getName()} + ' '"></span>
+                </div>
+                <div class="info-section">
+                    <label>Duration:</label>
+                    <span th:text="${movieAndScreening.getMovie().getDuration()}"></span>
+                </div>
+                <div class="button-container">
+                    <button th:each="screening : ${movieAndScreening.getScreening()}" th:onclick="'reserveScreening(' + ${screening.getId()} + ')'" class="btn btn-primary" th:text="${screening.getStartScreeningTime()}" data-toggle="tooltip" data-placement="top" title="Reserve"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body></html>

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.1.3/css/bootstrap.min.css"/>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/dataTables.bootstrap5.min.css"/>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ho+j7jyWK8fNQe+A12Hb8AhRq26LrZ/JpcUGGOn+Y7RsweNrtN/tE3MoK7ZeZDyx" crossorigin="anonymous">
+    </script>
+    <script th:src="@{/js/main.js}"></script>
+    <link th:href="@{/css/main.css}" rel="stylesheet">
+    <title>Cinema</title>
+</head>
+<body class="bg-dark">
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <div class="container-fluid">
+        <a href="#" class="navbar-brand">
+            <img th:src="@{/images/cinema-logo-2.png}" height="37" alt="Cinema">
+            Cinema
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarCollapse">
+            <div class="navbar-nav ms-auto">
+                <button th:unless="${loggedIn}" th:onclick="unHideLogin()" class="nav-item nav-link" >Login</button>
+                <a th:if="${loggedIn}" class="nav-item nav-link" th:href="@{/profile}">
+                    <img th:src="@{/images/person-icon-0.png}" alt="user"  height="37">
+                </a>
+                <a th:if="${loggedIn}" class="nav-item nav-link" th:href="@{/logout}">
+                    <img th:src="@{/images/icon-logout-0.jpg}" alt="user" height="37">
+                </a>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+<div th:if="${param.NotLoggedIn}" class="row m-top">
+        <div class="m-auto container padding-top-btm w-30 h-auto rounded-25px bg-light">
+            <ul class="nav nav-tabs nav-justified" id="myTab" role="tablist">
+                <li class="nav-item nav-tab" role="presentation">
+                    <button class="nav-link active first-tab"
+                            id="login-tab" data-bs-toggle="tab" data-bs-target="#login" type="button" role="tab" aria-controls="login"
+                            aria-selected="true">Login</button>
+                </li>
+                <li class="nav-item nav-tab" role="presentation">
+                    <button class="nav-link last-tab"
+                            id="register-tab" data-bs-toggle="tab" data-bs-target="#register" type="button" role="tab" aria-controls="register"
+                            aria-selected="false">Register</button>
+                </li>
+            </ul>
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+                    <form th:action="@{/login}" method="post">
+                        <div class="mb-3">
+                            <label for="loginEmail" class="form-label">Email address</label>
+                            <input type="email" class="form-control" id="loginEmail" name="loginEmail">
+                        </div>
+                        <div class="mb-3">
+                            <label for="loginPassword" class="form-label">Password</label>
+                            <input type="password" class="form-control" id="loginPassword" name="loginPassword">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Login</button>
+                    </form>
+<!--                    <div> <small class="text-muted">Don't have an account?</small>-->
+<!--                        <a href="#register" class="text-white outside-link">Register instead!</a>-->
+<!--                    </div>-->
+                </div>
+                <div class="tab-pane fade" id="register" role="tabpanel" aria-labelledby="register-tab">
+                    <form th:action="@{/}" th:object="${registerForm}" method="post">
+                        <div class="mb-2">
+                            <label for="registerUsername" class="form-label" th:required="true">Username</label>
+                            <input th:field="*{username}" type="text" class="form-control form-control-sm" id="registerUsername">
+                        </div>
+                        <div class="mb-2">
+                            <label for="registerEmail" class="form-label" th:required="true">Email address</label>
+                            <input th:field="*{userMail}" type="email" class="form-control form-control-sm" id="registerEmail">
+                        </div>
+                        <div class="mb-2">
+                            <label for="registerAdress" class="form-label">Adress</label>
+                            <input th:field="*{adress} " type="text" th:required="true" class="form-control form-control-sm" id="registerAdress">
+                        </div>
+                        <div class="mb-2" th:object="${listOfCities}">
+                            <label for="registerCity" class="form-label">City</label>
+                            <select id="registerCity" class="form-control form-control-sm"  type="text" th:required="true">
+                                <option  th:value="0" selected>Select City</option>
+                                <div th:each="city: ${listOfCities}">
+                                    <option th:value="${city.id}" th:text="${city.name}">
+                                    </option>
+                                </div>
+                            </select>
+                        </div>
+                        <div class="mb-2">
+                            <label for="registerName" class="form-label">First Name</label>
+                            <input th:field="*{userFirstName}" type="text" th:required="true" class="form-control form-control-sm" id="registerName">
+                        </div>
+                        <div class="mb-2">
+                            <label for="registerSurname" class="form-label">Last Name</label>
+                            <input th:field="*{userLastname}" th:required="true" type="text" class="form-control form-control-sm" id="registerSurname">
+                        </div>
+                        <div class="mb-2">
+                            <label for="registerPassword" class="form-label">Password</label>
+                            <input th:field="*{password} " type="password" th:required="true" class="form-control form-control-sm" id="registerPassword">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Register</button>
+<!--                        <div class="d-inline-block"> <small class="text-muted">Already have an account?</small>-->
+<!--                            <a href="#login" class="text-white outside-link">Click here to login!</a>-->
+<!--                        </div>-->
+                    </form>
+                </div>
+            </div>
+        </div>
+</div>
+
+
+<section class="mt-5 pt-5 pb-5 screen bg-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-6">
+                <h3 class="mb-3 color-white">Preview movies </h3>
+            </div>
+            <div class="col-6 text-right">
+                <a class="btn btn-primary mb-3 mr-1" href="#carouselExampleIndicators2" role="button" data-slide="prev">
+                    <i class="fa fa-arrow-left"></i>
+                </a>
+                <a class="btn btn-primary mb-3 " href="#carouselExampleIndicators2" role="button" data-slide="next">
+                    <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
+            <div class="col-12">
+                <div id="carouselExampleIndicators2" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner" th:object="${firstCards}" >
+                        <div class="carousel-item active">
+                            <div class="row">
+                                <div class="col-md-4 mb-3" style="height : 630px">
+                                    <div class="card" th:object="${firstCards.get(0)}" style="width : 320px  ; height: 400px">
+                                        <img th:src="@{${firstCards.get(0).getImage()}}" class="img-fluid" alt="80%x280" >
+                                        <div class="card-body bg-white">
+                                            <h4 class="card-title" th:text="${firstCards.get(0).getTitle()}"></h4>
+                                            <p class="card-text" th:text="${firstCards.get(0).getDescription()}"></p>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3" style="height : 630px">
+                                    <div class="card" th:object="${firstCards.get(1)}" style="width : 320px  ; height: 400px">
+                                        <img th:src="@{${firstCards.get(1).getImage()}}" class="img-fluid" alt="80%x280" >
+                                        <div class="card-body bg-white">
+                                            <h4 class="card-title" th:text="${firstCards.get(1).getTitle()}"></h4>
+                                            <p class="card-text" th:text="${firstCards.get(1).getDescription()}"></p>
+
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3" style="height: 630px">
+                                    <div class="card" th:object="${firstCards.get(2)}" style="width : 320px  ; height: 400px">
+                                        <img th:src="@{${firstCards.get(2).getImage()}}" class="img-fluid" alt="80%x280" >
+                                        <div class="card-body bg-white">
+                                            <h4 class="card-title" th:text="${firstCards.get(2).getTitle()}"></h4>
+                                            <p class="card-text" th:text="${firstCards.get(2).getDescription()}"></p>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="carousel-item" th:each="listOfThreeMovies : ${previewMovies}">
+                            <div class="row">
+                                <div class="col-md-4 mb-3" style="height : 630px">
+                                    <div class="card" th:object="${listOfThreeMovies.get(0)}" style="width : 320px ; height: 400px">
+                                        <img  th:src="@{${listOfThreeMovies.get(0).getImage()}}" class="img-fluid" alt="80%x280" >
+                                        <div class="card-body bg-white">
+                                            <h4 class="card-title" th:text="${listOfThreeMovies.get(0).getTitle()}"></h4>
+                                            <p class="card-text" th:text="${listOfThreeMovies.get(0).getDescription()}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3" style="height :630px">
+                                    <div class="card" th:object="${listOfThreeMovies.get(1)}" style="width : 320px ; height: 400px">
+                                        <img th:src="@{${listOfThreeMovies.get(1).getImage()}}" class="img-fluid" alt="80%x280" >
+                                        <div class="card-body bg-white">
+                                            <h4 class="card-title" th:text="${listOfThreeMovies.get(1).getTitle()}"></h4>
+                                            <p class="card-text" th:text="${listOfThreeMovies.get(1).getDescription()}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4 mb-3" style="height : 630px">
+                                    <div class="card" th:object="${listOfThreeMovies.get(2)}" style="width : 320px  ; height: 400px">
+                                        <img th:src="@{${listOfThreeMovies.get(2).getImage()}}" class="img-fluid" alt="80%x280" >
+                                        <div class="card-body bg-white">
+                                            <h4 class="card-title" th:text="${listOfThreeMovies.get(2).getTitle()}"></h4>
+                                            <p class="card-text" th:text="${listOfThreeMovies.get(2).getDescription()}"></p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+        <div class="btn-group margin">
+            <a  class="btn btn-primary dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Movie
+            </a>
+            <div class="dropdown-menu" th:object="${listOfMovies}">
+                <a th:each="movie : ${listOfMovies}" class="dropdown-item" href="#" th:text="${movie.getTitle()}"></a>
+            </div>
+        </div>
+        <div class="btn-group marginSecond">
+            <a role="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Select Cinema
+            </a>
+            <div class="dropdown-menu" th:object="${listOfCinemas}">
+                <a th:each="cinema : ${listOfCinemas}" th:onclick="'showMoviesForCinema(' + ${cinema.getId()} +')'" class="dropdown-item" href="#" th:text="${cinema.getCinemaName()}"></a>
+            </div>
+        </div>
+</body>
+</html>

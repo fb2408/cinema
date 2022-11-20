@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" th:href="@{/css/reserveMovieSeat.css}" />
+    <title>Cinema</title>
+</head>
+<body>
+<div class="container">
+    <div class="movie-container" th:objekt="${movie}">
+        <label>Movie:</label>
+        <input th:value="${movie.getTitle()}" disabled>
+        <input th:id="movie-price" th:value="${moviePrice}" hidden>
+    </div>
+    <div class="movie-container" th:objekt="${cinemaHall}">
+        <label>Cinema Hall:</label>
+        <input th:value="${cinemaHall.getName()}" disabled>
+    </div>
+    <div class="movie-container">
+        <label>Start screening:</label>
+        <input th:value="${dateTime}" disabled>
+    </div>
+</div>
+
+<ul class="showcase">
+    <li>
+        <div class="seat"></div>
+        <small>N/A</small>
+    </li>
+    <li>
+        <div class="seat selected"></div>
+        <small>Selected</small>
+    </li>
+    <li>
+        <div class="seat occupied"></div>
+        <small>Occupied</small>
+    </li>
+</ul>
+
+<div class="container">
+    <div class="screen"></div>
+    <div class="row" th:each="row : ${listOfSeats}">
+        <div th:id="${row.get(0).getHallSeatCompleteId()}" th:if="${row.get(0).isOccupied() == false}" class="seat" onclick="toggleSelected(this.id) " ></div>
+        <div th:id="${row.get(0).getHallSeatCompleteId()}" th:if="${row.get(0).isOccupied() == true}" class="seat occupied" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(1).getHallSeatCompleteId()}" th:if="${row.get(1).isOccupied() == false}" class="seat" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(1).getHallSeatCompleteId()}" th:if="${row.get(1).isOccupied() == true}" class="seat occupied" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(2).getHallSeatCompleteId()}" th:if="${row.get(2).isOccupied() == false}" class="seat" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(2).getHallSeatCompleteId()}" th:if="${row.get(2).isOccupied() == true}" class="seat occupied" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(3).getHallSeatCompleteId()}" th:if="${row.get(3).isOccupied() == false}" class="seat" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(3).getHallSeatCompleteId()}" th:if="${row.get(3).isOccupied() == true}" class="seat occupied" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(4).getHallSeatCompleteId()}" th:if="${row.get(4).isOccupied() == false}" class="seat" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(4).getHallSeatCompleteId()}" th:if="${row.get(4).isOccupied() == true}" class="seat occupied" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(5).getHallSeatCompleteId()}" th:if="${row.get(5).isOccupied() == false}" class="seat" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(5).getHallSeatCompleteId()}" th:if="${row.get(5).isOccupied() == true}" class="seat occupied" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(6).getHallSeatCompleteId()}" th:if="${row.get(6).isOccupied() == false}" class="seat" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(6).getHallSeatCompleteId()}" th:if="${row.get(6).isOccupied() == true}" class="seat occupied" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(7).getHallSeatCompleteId()}" th:if="${row.get(7).isOccupied() == false}" class="seat" onclick="toggleSelected(this.id) "></div>
+        <div th:id="${row.get(7).getHallSeatCompleteId()}" th:if="${row.get(7).isOccupied() == true}" class="seat occupied" onclick="toggleSelected(this.id) "></div>
+    </div>
+</div>
+
+<p class="text">
+    You have selected <span id="count">0</span> seats for a price of HRK<span
+        id="total"
+>0</span>
+</p>
+
+<span class="button-container">
+    <button id="reserveButton" onclick="reserve()">Reserve</button>
+    <button id="reserveAndPayButton" class="pay2-modal-view" data-bs-toggle="modal" data-bs-target="#payReservationModal2">Reserve And Pay</button>
+</span>
+
+<script type="text/javascript">
+
+    let container = document.querySelector(".container");
+    let seats = document.querySelectorAll('.row .seat');
+    let count = document.getElementById('count');
+    let total = document.getElementById('total');
+    let moviePriceElement = document.getElementById('movie-price');
+    // let reserveButton = document.getElementById('reserveButton');
+    // let reserveAndPayButton = document.getElementById('reserveAndPayButton');
+
+
+
+    // populateUI();
+    emptySelectedSeats();
+    let ticketPrice = +moviePriceElement.value;
+    console.log(ticketPrice);
+
+    //Save selected movie index and price
+    function setMovieData(moviePrice) {
+        localStorage.setItem('moviePrice', moviePrice);
+    }
+
+    //Update total and count
+    function updateSelectedCount() {
+        let selectedSeats = document.querySelectorAll('.row .seat.selected');
+
+        let seatsIndex = [...selectedSeats].map(seat => [...seats].indexOf(seat));
+
+        localStorage.setItem('selectedSeats', JSON.stringify(seatsIndex));
+
+        let selectedSeatsCount = selectedSeats.length;
+
+        count.innerText = selectedSeatsCount;
+        total.innerText = selectedSeatsCount * ticketPrice;
+
+        setMovieData(moviePriceElement.value);
+    }
+
+    //Get data from localstorage and populate UI
+    // function populateUI() {
+    //     let selectedSeats = JSON.parse(localStorage.getItem('selectedSeats'));
+    //
+    //     if (selectedSeats !== null && selectedSeats.length > 0) {
+    //         seats.forEach((seat, index) => {
+    //             if (selectedSeats.indexOf(index) > -1) {
+    //                 seat.classList.add('selected');
+    //             }
+    //         });
+    //     }
+    // }
+
+    function emptySelectedSeats() {
+        localStorage.setItem('selectedSeats', JSON.stringify([]));
+    }
+
+    container.addEventListener("click", event => {
+        console.log("I am here");
+        if (
+            event.target.classList.contains('seat') &&
+            !event.target.classList.contains('occupied')
+        ) {
+            event.target.classList.toggle('selected');
+
+            updateSelectedCount();
+        }
+    }, true)
+
+    function toggleSelected(id) {
+        console.log("i am here")
+        let element = document.getElementById(id);
+        if(element.classList.contains('seat') && !element.classList.contains('occupied')) {
+            element.classList.toggle('selected');
+            updateSelectedCount();
+        }
+    }
+
+    // Reserve button click event
+    function reserve() {
+        let selectedSeatsPositions = JSON.parse(localStorage.getItem('selectedSeats'));
+        if(selectedSeatsPositions.length <= 0) {
+        } else {
+            let stringPathVariable = "";
+            let firstIteration = true;
+            for(let value of selectedSeatsPositions) {
+                if(!firstIteration) {
+                    stringPathVariable += "&";
+                } else {
+                    firstIteration = false;
+                }
+                stringPathVariable += value ;
+
+            }
+            console.log(stringPathVariable);
+            let currentUrl = window.location.href.split('?')[0] + "reserve/" + stringPathVariable;
+            window.open(currentUrl ,"_self")
+        }
+
+    }
+
+    //Reserve And Pay button click event
+    function reserveAndPay() {
+        let selectedSeatsPositions = JSON.parse(localStorage.getItem('selectedSeats'));
+        if(selectedSeatsPositions.length <= 0) {
+        } else {
+            let stringPathVariable = "";
+            let firstIteration = true;
+            for (let value of selectedSeatsPositions) {
+                if (!firstIteration) {
+                    stringPathVariable += "&";
+                } else {
+                    firstIteration = false;
+                }
+                stringPathVariable += value;
+            }
+            console.log(stringPathVariable);
+            let currentUrl = window.location.href.split('#')[0] + "/reserveAndPay/" + stringPathVariable + "/?" + "amount=" + payValue + "&isIncluded=" + isIncluded + "&amountOfIncluded=" + bonusPointsIncluded;
+            window.open(currentUrl, "_self");
+        }
+    }
+
+    //Initial count and total set
+    updateSelectedCount();
+
+</script>
+
+</body>
+</html>
