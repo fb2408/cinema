@@ -4,3 +4,6 @@ In this final work I have implemented an application which makes it easier for c
 
 <img width="791" alt="image" src="https://github.com/fb2408/cinema/assets/92520823/f4ed9fe5-6aed-4c6a-9431-08f94c99f4de">
 
+<img width="788" alt="image" src="https://github.com/fb2408/cinema/assets/92520823/da304234-5ca3-44da-a1d4-1f9f33c375d4">
+
+
