@@ -5,7 +5,7 @@ In this final work I have implemented an application which makes it easier for c
 If you want you can se whole documentation on this link -> https://github.com/fb2408/cinema/blob/main/zavrsnirad.pdf
 
 <img width="400" alt="image" src="https://github.com/fb2408/cinema/assets/92520823/55312f2f-188a-4dd6-83df-7b797c2b9c7b">
-<div width="200"></div>
+<div width="200" height="50"></div>
 <img width="400" margin-left="20px" alt="image" src="https://github.com/fb2408/cinema/assets/92520823/da304234-5ca3-44da-a1d4-1f9f33c375d4">
 
 
